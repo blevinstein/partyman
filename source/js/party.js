@@ -52,5 +52,21 @@ var FacebookCtrl = function($scope) {
     });
   };
 
+  $scope.select_event = function(id) {
+    FB.api('/'+id, function(response) {
+      $scope.event = response;
+      $scope.$apply();
+    });
+    types = ['attending','maybe','declined','noreply'];
+    for(i=0; i<types.length; i++) {
+      (function(type) {
+        FB.api('/'+id+'/'+type+'?limit=100000', function(response) {
+          $scope.event[type] = response.data.length;
+          $scope.$apply();
+        });
+      })(types[i]);
+    }
+  };
+
   $scope.get_status();
 }

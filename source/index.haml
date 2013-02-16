@@ -16,13 +16,19 @@
         %img{:src=>'{{pic}}','ng-show'=>'pic.length > 0'}
       %button{'ng-click'=>'login()'} Login
       %button{'ng-click'=>'logout()'} Logout
-    .events{'ng-show'=>'party == null'}
+    .events{'ng-show'=>'event == null'}
       %ul
         %li{'ng-show'=>'events.length == 0'}
           %button{'ng-click'=>'get_events()'} Get Events
         %li{'ng-repeat'=>'event in events'}
-          {{event.name}}
+          %button{'ng-click'=>'select_event(event.id)'} {{event.name}}
         %li{'ng-show'=>'prev_events_link.length > 0'}
           %button{'ng-click'=>'get_events("prev")'} Previous
         %li{'ng-show'=>'next_events_link.length > 0'}
           %button{'ng-click'=>'get_events("next")'} Next
+    .event{'ng-show'=>'event'}
+      .title {{event.name}}
+      .attending Attending: {{event.attending}}
+      .maybe Maybe: {{event.maybe}}
+      .declined Declined: {{event.declined}}
+      .noreply No Reply: {{event.noreply}}
