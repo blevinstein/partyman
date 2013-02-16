@@ -1,14 +1,18 @@
 !!! 5
 
-%html
+%html{'ng-app' => true}
   %head
     %script{:src => 'http://code.angularjs.org/1.1.2/angular.min.js'}
+    %script{:src => 'http://connect.facebook.net/en_US/all.js'}
     %script{:src => 'js/fb.js'}
     %script{:src => 'js/party.js'}
   %body
-    .fb-root
-    %p
-      Status:
-      %span#fb-status
-    %button{:onclick => 'login()'} Login
-    %button{:onclick => 'logout()'} Logout
+    .fb{'ng-controller'=>'SelectCtrl'}
+      %p
+        %span Status: {{fb_status}}
+      %p
+        %span Name: {{fb_name}}
+      %p
+        %img{:src=>'{{fb_pic}}','ng-hide'=>'{{fb_pic == ""}}'}
+      %button{'ng-click'=>'login()'} Login
+      %button{'ng-click'=>'logout()'} Logout
