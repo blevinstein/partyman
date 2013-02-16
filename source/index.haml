@@ -6,13 +6,23 @@
     %script{:src => 'http://connect.facebook.net/en_US/all.js'}
     %script{:src => 'js/fb.js'}
     %script{:src => 'js/party.js'}
-  %body
-    .fb{'ng-controller'=>'SelectCtrl'}
+  %body{'ng-controller'=>'FacebookCtrl'}
+    .fb
       %p
-        %span Status: {{fb_status}}
+        %span Status: {{status}}
       %p
-        %span Name: {{fb_name}}
+        %span Name: {{name}}
       %p
-        %img{:src=>'{{fb_pic}}','ng-hide'=>'{{fb_pic == ""}}'}
+        %img{:src=>'{{pic}}','ng-show'=>'pic.length > 0'}
       %button{'ng-click'=>'login()'} Login
       %button{'ng-click'=>'logout()'} Logout
+    .events{'ng-show'=>'party == null'}
+      %ul
+        %li{'ng-show'=>'events.length == 0'}
+          %button{'ng-click'=>'get_events()'} Get Events
+        %li{'ng-repeat'=>'event in events'}
+          {{event.name}}
+        %li{'ng-show'=>'prev_events_link.length > 0'}
+          %button{'ng-click'=>'get_events("prev")'} Previous
+        %li{'ng-show'=>'next_events_link.length > 0'}
+          %button{'ng-click'=>'get_events("next")'} Next

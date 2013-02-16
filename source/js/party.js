@@ -1,43 +1,56 @@
-var SelectCtrl = function($scope) {
-  $scope.fb_pic = 'img/fb_default.jpg';
+var FacebookCtrl = function($scope) {
+  $scope.pic = 'img/fb_default.jpg';
+  $scope.events = [];
   // get status and name
-  $scope.status = function() {
+  $scope.get_status = function() {
     FB.getLoginStatus(function(response) {
       if (response.status === 'connected') {
-        $scope.fb_status = 'Connected';
+        $scope.status = 'Connected';
         FB.api('/me', function(response) {
-          $scope.fb_name = response.name;
-          $scope.fb_pic = 'https://graph.facebook.com/' + response.id + '/picture';
-          $scope.$apply(); // force update
+          $scope.name = response.name;
+          $scope.pic = 'https://graph.facebook.com/' + response.id + '/picture';
+          $scope.$apply();
         });
-      } else if (response.status === 'not_authorized') {
-        $scope.fb_status = 'Not Authorized';
-        $scope.fb_name = '';
-        $scope.fb_pic = 'img/fb_default.jpg';
       } else {
-        $scope.fb_status = 'Not Logged In';
-        $scope.fb_name = '';
-        $scope.fb_pic = 'img/fb_default.jpg';
+        if (response.status === 'not_authorized') {
+          $scope.status = 'Not Authorized';
+        } else {
+          $scope.status = 'Not Logged In';
+        }
+        $scope.name = '';
+        $scope.pic = 'img/fb_default.jpg';
+        $scope.$apply();
       }
-      $scope.$apply(); // force update
     });
   };
 
-  // login function
   $scope.login = function() {
     FB.login(function(response) {
       if(response.authResponse) {
-        $scope.status();
+        $scope.get_status();
       }
-    });
+    }, {scope: 'user_events,friends_events'});
   };
 
-  // logout function
   $scope.logout = function() {
     FB.logout(function(response) {
-      $scope.status();
+      $scope.get_status();
     });
   };
 
-  $scope.status();
+  $scope.get_events = function(dir) {
+    var url = '/me/events';
+    if(dir == 'next')
+      url = $scope.next_events_link;
+    else if(dir == 'prev')
+      url = $scope.prev_events_link;
+    FB.api(url, function(response) {
+      $scope.events = response.data;
+      $scope.prev_events_link = response.paging.previous;
+      $scope.next_events_link = response.paging.next;
+      $scope.$apply();
+    });
+  };
+
+  $scope.get_status();
 }
