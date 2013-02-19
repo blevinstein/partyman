@@ -1,0 +1,68 @@
+/* Tools */
+
+.ctable
+  display: table
+  > *
+    display: table-cell
+
+.rtable
+  display: table
+  > *
+    display: table-row
+
+.table
+  display: table
+  > *
+    display: table-row
+    > *
+      display: table-cell
+
+.inline *
+  display: inline-block
+  vertical-align: middle
+
+.full
+  width: 100%
+
+.spread
+  text-align: center
+  & > *:first-child
+    text-align: left
+  & > *:last-child
+    text-align: right
+
+.center
+  text-align: center
+
+.mcenter
+  margin-left: auto
+  margin-right: auto
+
+/* Specific Elements */
+
+html
+  background-color: grey
+
+.page
+  width: 100%
+
+.content
+  margin: 0 auto
+  padding: 50px
+  background-color: lightGrey
+  width: 800px
+
+.events
+  width: 350px
+  border-collapse: collapse
+  > *
+    border: 1px solid black
+    > *
+      padding: 5px
+    background-color: white
+    cursor: pointer
+    &:hover
+      background-color: lightGrey
+
+.status > * > *
+  padding: 0 5px

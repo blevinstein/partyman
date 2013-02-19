@@ -47,7 +47,7 @@
 #   end
 # end
 
-set :css_dir, 'sass'
+set :css_dir, 'css'
 set :js_dir, 'js'
 set :images_dir, 'img'
 

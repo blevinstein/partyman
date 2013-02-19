@@ -2,33 +2,53 @@
 
 %html{'ng-app' => true}
   %head
-    %script{:src => 'http://code.angularjs.org/1.1.2/angular.min.js'}
-    %script{:src => 'http://connect.facebook.net/en_US/all.js'}
-    %script{:src => 'js/fb.js'}
-    %script{:src => 'js/party.js'}
-  %body{'ng-controller'=>'FacebookCtrl'}
-    .fb
-      %p
-        %span Status: {{status}}
-      %p
-        %span Name: {{name}}
-      %p
-        %img{:src=>'{{pic}}','ng-show'=>'pic.length > 0'}
-      %button{'ng-click'=>'login()'} Login
-      %button{'ng-click'=>'logout()'} Logout
-    .events{'ng-show'=>'event == null'}
-      %ul
-        %li{'ng-show'=>'events.length == 0'}
-          %button{'ng-click'=>'get_events()'} Get Events
-        %li{'ng-repeat'=>'event in events'}
-          %button{'ng-click'=>'select_event(event.id)'} {{event.name}}
-        %li{'ng-show'=>'prev_events_link.length > 0'}
-          %button{'ng-click'=>'get_events("prev")'} Previous
-        %li{'ng-show'=>'next_events_link.length > 0'}
-          %button{'ng-click'=>'get_events("next")'} Next
-    .event{'ng-show'=>'event'}
-      .title {{event.name}}
-      .attending Attending: {{event.attending}}
-      .maybe Maybe: {{event.maybe}}
-      .declined Declined: {{event.declined}}
-      .noreply No Reply: {{event.noreply}}
+    = stylesheet_link_tag 'index'
+    = javascript_include_tag 'http://code.angularjs.org/1.1.2/angular.min.js'
+    = javascript_include_tag 'http://connect.facebook.net/en_US/all.js'
+    = javascript_include_tag 'fb'
+    = javascript_include_tag 'party'
+  %body{'ng-controller'=>'PartyCtrl'}
+    .page
+      .content.rtable
+        .header
+          .ctable.full.spread
+            .title
+              %h1 Party Manager
+            .fb.inline
+              .not-logged-in{'ng-show'=>'status != "connected"'}
+                %a{:href=>'#','ng-click'=>'login()'}
+                  = image_tag 'fb-login.png'
+              .logged-in{'ng-show'=>'status == "connected"'}
+                %a{:href=>'#','ng-click'=>'logout()'} Logout
+                |
+                .name {{name}}
+                .profile
+                  %img{:src=>'{{pic}}'}
+        .body
+          .select-event{'ng-show'=>'event == null && events != null'}
+            .controls.center
+              %a{:href=>'#','ng-click'=>'get_events("prev")'} Previous
+              |
+              %a{:href=>'#','ng-click'=>'get_events("next")'} Next
+            .event-list
+              %ul.events.table.mcenter
+                %li.inline{'ng-repeat'=>'event in events','ng-click'=>'select_event(event.id)'}
+                  .picture
+                    %img{:src=>'{{event.picture.data.url}}'}
+                  .name {{event.name}}
+          .event{'ng-show'=>'event'}
+            .title
+              %h2 {{event.name}}
+            .status.table
+              .attending
+                .label Attending
+                .count {{event.attending}}
+              .maybe
+                .label Maybe
+                .count {{event.maybe}}
+              .declined
+                .label Declined
+                .count {{event.declined}}
+              .noreply
+                .label No Reply
+                .count {{event.noreply}}

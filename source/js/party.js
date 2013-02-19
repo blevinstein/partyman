@@ -1,24 +1,21 @@
-var FacebookCtrl = function($scope) {
-  $scope.pic = 'img/fb_default.jpg';
+var PartyCtrl = function($scope) {
+  $scope.pic = '/img/fb-default-profile.jpg';
   $scope.events = [];
   // get status and name
   $scope.get_status = function() {
     FB.getLoginStatus(function(response) {
+      $scope.status = response.status;
       if (response.status === 'connected') {
-        $scope.status = 'Connected';
         FB.api('/me', function(response) {
           $scope.name = response.name;
           $scope.pic = 'https://graph.facebook.com/' + response.id + '/picture';
           $scope.$apply();
         });
+        $scope.get_events();
       } else {
-        if (response.status === 'not_authorized') {
-          $scope.status = 'Not Authorized';
-        } else {
-          $scope.status = 'Not Logged In';
-        }
         $scope.name = '';
-        $scope.pic = 'img/fb_default.jpg';
+        $scope.pic = '/img/fb-default-profile.jpg';
+        $scope.events = null;
         $scope.$apply();
       }
     });
@@ -39,7 +36,7 @@ var FacebookCtrl = function($scope) {
   };
 
   $scope.get_events = function(dir) {
-    var url = '/me/events';
+    var url = '/me/events?fields=id,name,picture';
     if(dir == 'next')
       url = $scope.next_events_link;
     else if(dir == 'prev')
